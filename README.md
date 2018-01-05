@@ -7,8 +7,10 @@
 
 > https://coreos.com/etcd/docs/latest/op-guide/security.html
 
+> https://quay.io/repository/coreos/etcd?tag=latest&tab=tags 
 
-![](https://coreos.com/os/docs/latest/img/small.png)
+![](http://xxx.png)
+
 ## 部署
 
 机房 | 	IP	 | Zone	 | 系统版本 |  域名 
@@ -27,22 +29,22 @@ export ETCDNODEIP1=10.xx.xx.228
 export ETCDNODEIP2=10.xx.xx.229
 
 “引火”etcd
-[root@227 ~]# docker run -d  -p 12379:2379 --name etcd-one registry.dpool.sina.com.cn/dpool/etcd:v3.2.12  etcd  --name etcd-one  --listen-client-urls="http://0.0.0.0:2379" --advertise-client-urls http://0.0.0.0:2379
+[root@227 ~]# docker run -d  -p 12379:2379 --name etcd-one quay.io/coreos/etcd:v3.2.12  etcd  --name etcd-one  --listen-client-urls="http://0.0.0.0:2379" --advertise-client-urls http://0.0.0.0:2379
 8be872d59011bd69df1fe5cce8b422792c9761bb50bb297d06b049616a9930ac
 [root@227 ~]# curl  -X PUT   http://10.xx.xx.227:12379/v2/keys/discovery/for-discovery-keyabc/_config/size -d value=3
 {"action":"set","node":{"key":"/discovery/for-discovery-keyabc/_config/size","value":"3","modifiedIndex":4,"createdIndex":4}}
 
 etcd0
-[root@227 ~]# docker run -d --net=host  --restart always  -v /data2/etcd-data:/var/etcd --volume=/usr/share/ca-certificates/:/etc/etcd/ssl -p 4001:4001 -p 2380:2380 -p 2379:2379  --name etcd registry.dpool.sina.com.cn/dpool/etcd:v3.2.12  etcd  --name etcd0  --data-dir=/var/etcd  -advertise-client-urls https://${ETCDNODEIP0}:2379,https://${ETCDNODEIP0}:4001  -listen-client-urls https://0.0.0.0:2379,http://0.0.0.0:4001  -initial-advertise-peer-urls https://${ETCDNODEIP0}:2380  -listen-peer-urls https://0.0.0.0:2380  --cert-file /etc/etcd/ssl/etcd-server.pem  --key-file /etc/etcd/ssl/etcd-server-key.pem  --trusted-ca-file /etc/etcd/ssl/ca.pem   --client-cert-auth=true  --peer-cert-file /etc/etcd/ssl/etcd-server.pem   --peer-key-file /etc/etcd/ssl/etcd-server-key.pem  --peer-trusted-ca-file /etc/etcd/ssl/ca.pem   --peer-client-cert-auth=true --discovery http://10.xx.xx.227:12379/v2/keys/discovery/for-discovery-keyabc
+[root@227 ~]# docker run -d --net=host  --restart always  -v /data2/etcd-data:/var/etcd --volume=/usr/share/ca-certificates/:/etc/etcd/ssl -p 4001:4001 -p 2380:2380 -p 2379:2379  --name etcd quay.io/coreos/etcd:v3.2.12  etcd  --name etcd0  --data-dir=/var/etcd  -advertise-client-urls https://${ETCDNODEIP0}:2379,https://${ETCDNODEIP0}:4001  -listen-client-urls https://0.0.0.0:2379,http://0.0.0.0:4001  -initial-advertise-peer-urls https://${ETCDNODEIP0}:2380  -listen-peer-urls https://0.0.0.0:2380  --cert-file /etc/etcd/ssl/etcd-server.pem  --key-file /etc/etcd/ssl/etcd-server-key.pem  --trusted-ca-file /etc/etcd/ssl/ca.pem   --client-cert-auth=true  --peer-cert-file /etc/etcd/ssl/etcd-server.pem   --peer-key-file /etc/etcd/ssl/etcd-server-key.pem  --peer-trusted-ca-file /etc/etcd/ssl/ca.pem   --peer-client-cert-auth=true --discovery http://10.xx.xx.227:12379/v2/keys/discovery/for-discovery-keyabc
 6a1fe7ecd6b3d75aabb78d50e136b80b77dcb0a3054e6562f31adf6d2f3ea46b
 
 
 etcd1
-[root@228 ~]# docker run -d --net=host  --restart always  -v /data2/etcd-data:/var/etcd --volume=/usr/share/ca-certificates/:/etc/etcd/ssl -p 4001:4001 -p 2380:2380 -p 2379:2379  --name etcd registry.dpool.sina.com.cn/dpool/etcd:v3.2.12  etcd  --name etcd1  --data-dir=/var/etcd  -advertise-client-urls https://${ETCDNODEIP0}:2379,https://${ETCDNODEIP0}:4001  -listen-client-urls https://0.0.0.0:2379,http://0.0.0.0:4001  -initial-advertise-peer-urls https://${ETCDNODEIP0}:2380  -listen-peer-urls https://0.0.0.0:2380  --cert-file /etc/etcd/ssl/etcd-server.pem  --key-file /etc/etcd/ssl/etcd-server-key.pem  --trusted-ca-file /etc/etcd/ssl/ca.pem   --client-cert-auth=true  --peer-cert-file /etc/etcd/ssl/etcd-server.pem   --peer-key-file /etc/etcd/ssl/etcd-server-key.pem  --peer-trusted-ca-file /etc/etcd/ssl/ca.pem   --peer-client-cert-auth=true  --discovery  http://10.xx.xx.227:12379/v2/keys/discovery/for-discovery-keyabc
+[root@228 ~]# docker run -d --net=host  --restart always  -v /data2/etcd-data:/var/etcd --volume=/usr/share/ca-certificates/:/etc/etcd/ssl -p 4001:4001 -p 2380:2380 -p 2379:2379  --name etcd quay.io/coreos/etcd:v3.2.12  etcd  --name etcd1  --data-dir=/var/etcd  -advertise-client-urls https://${ETCDNODEIP0}:2379,https://${ETCDNODEIP0}:4001  -listen-client-urls https://0.0.0.0:2379,http://0.0.0.0:4001  -initial-advertise-peer-urls https://${ETCDNODEIP0}:2380  -listen-peer-urls https://0.0.0.0:2380  --cert-file /etc/etcd/ssl/etcd-server.pem  --key-file /etc/etcd/ssl/etcd-server-key.pem  --trusted-ca-file /etc/etcd/ssl/ca.pem   --client-cert-auth=true  --peer-cert-file /etc/etcd/ssl/etcd-server.pem   --peer-key-file /etc/etcd/ssl/etcd-server-key.pem  --peer-trusted-ca-file /etc/etcd/ssl/ca.pem   --peer-client-cert-auth=true  --discovery  http://10.xx.xx.227:12379/v2/keys/discovery/for-discovery-keyabc
 ff0762c2a3da243af30e7c05fa583f137ab9216e68178b3c730e135f3c67f77f
 
 etcd2
-[root@229 ~]# docker run -d --net=host  --privileged --restart always  -v /data2/etcd-data:/var/etcd --volume=/usr/share/ca-certificates/:/etc/etcd/ssl -p 4001:4001 -p 2380:2380 -p 2379:2379  --name etcd registry.dpool.sina.com.cn/dpool/etcd:v3.2.12  etcd  --name etcd2  --data-dir=/var/etcd  -advertise-client-urls https://${ETCDNODEIP2}:2379,https://${ETCDNODEIP2}:4001  -listen-client-urls https://0.0.0.0:2379,http://0.0.0.0:4001  -initial-advertise-peer-urls https://${ETCDNODEIP2}:2380  -listen-peer-urls https://0.0.0.0:2380  --cert-file /etc/etcd/ssl/etcd-server.pem  --key-file /etc/etcd/ssl/etcd-server-key.pem  --trusted-ca-file /etc/etcd/ssl/ca.pem   --client-cert-auth=true  --peer-cert-file /etc/etcd/ssl/etcd-server.pem   --peer-key-file /etc/etcd/ssl/etcd-server-key.pem  --peer-trusted-ca-file /etc/etcd/ssl/ca.pem   --peer-client-cert-auth=true   --discovery   http://10.xx.xx.227:12379/v2/keys/discovery/for-discovery-keyabc
+[root@229 ~]# docker run -d --net=host  --privileged --restart always  -v /data2/etcd-data:/var/etcd --volume=/usr/share/ca-certificates/:/etc/etcd/ssl -p 4001:4001 -p 2380:2380 -p 2379:2379  --name etcd quay.io/coreos/etcd:v3.2.12  etcd  --name etcd2  --data-dir=/var/etcd  -advertise-client-urls https://${ETCDNODEIP2}:2379,https://${ETCDNODEIP2}:4001  -listen-client-urls https://0.0.0.0:2379,http://0.0.0.0:4001  -initial-advertise-peer-urls https://${ETCDNODEIP2}:2380  -listen-peer-urls https://0.0.0.0:2380  --cert-file /etc/etcd/ssl/etcd-server.pem  --key-file /etc/etcd/ssl/etcd-server-key.pem  --trusted-ca-file /etc/etcd/ssl/ca.pem   --client-cert-auth=true  --peer-cert-file /etc/etcd/ssl/etcd-server.pem   --peer-key-file /etc/etcd/ssl/etcd-server-key.pem  --peer-trusted-ca-file /etc/etcd/ssl/ca.pem   --peer-client-cert-auth=true   --discovery   http://10.xx.xx.227:12379/v2/keys/discovery/for-discovery-keyabc
 20231dec63fabf3676bc086d9551975d22f7653c8410921875d549dbca0ba917
 ```
 
